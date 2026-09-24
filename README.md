@@ -50,3 +50,13 @@ fullstack/
 ├── .gitignore
 ├── package.json
 └── package-lock.json
+
+## 📸 Screenshots
+
+### 🔐 Login
+
+![Login Screen](screenshots/login.png)
+
+### 📊 Dashboard
+
+![Dashboard](screenshots/dashboard.png)
