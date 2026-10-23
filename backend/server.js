@@ -1,3 +1,4 @@
+console.log("SERVER FILE UPDATED");
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
@@ -52,11 +53,22 @@ app.use(express.json());
 
 const pool = new Pool({
   host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
+  port: Number(process.env.DB_PORT || 5432),
   database: process.env.DB_NAME,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
 });
+
+
+console.log("Testing database connection...");
+
+pool.query("SELECT NOW()")
+  .then(() => {
+    console.log("Database connected successfully");
+  })
+  .catch((error) => {
+    console.error("Database connection failed:", error.message);
+  });
 
 // ==========================================
 // HOME
@@ -899,7 +911,7 @@ app.get(
 // Includes automatic stock restoration
 // when an order is cancelled.
 app.put(
-  "/orders/:id/delivery",
+  "/orders/:id/delivery-details",
   requireAdmin,
   async (req, res) => {
     const {
@@ -1236,7 +1248,8 @@ app.put(
 // START SERVER
 // ==========================================
 
-const PORT = 5000;
+
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);

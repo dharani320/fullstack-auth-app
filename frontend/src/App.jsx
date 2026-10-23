@@ -5,10 +5,9 @@ import anchovyImage from "./assets/anchovy.png";
 import dryFishImage from "./assets/dryfish.png";
 import prawnsImage from "./assets/prawns.png";
 import heroImage from "./assets/kubaran-hero(1).png";
-const API_URL =
-  window.location.hostname === "localhost"
-    ? "http://localhost:5000"
-    : `http://${window.location.hostname}:5000`;
+
+const API_URL = "https://fullstack-auth-app-74ca.onrender.com";
+
 
 const trackingStatuses = [
   "Pending",
