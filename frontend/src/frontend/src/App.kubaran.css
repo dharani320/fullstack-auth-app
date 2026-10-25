@@ -5022,3 +5022,104 @@ background: #d8b56a;
     font-size: clamp(27px, 7vw, 36px) !important;
   }
 }
+
+/* Align the collection with KUBARAN's dark and gold visual identity. */
+section#products.products-section {
+  color: #f4f1e8 !important;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(216, 181, 106, .08), transparent 42%),
+    linear-gradient(180deg, #0d1210 0%, #080b0b 100%) !important;
+}
+
+#products .products-heading h2 {
+  color: #f4f1e8 !important;
+}
+
+#products .products-heading .eyebrow {
+  color: #d8b56a !important;
+}
+
+#products .products-intro {
+  color: #aeb5ae !important;
+}
+
+#products .products-count {
+  border-left: 1px solid rgba(216, 181, 106, .3);
+}
+
+#products .products-count span {
+  color: #d8b56a !important;
+}
+
+#products .products-count small {
+  color: #909891 !important;
+}
+
+#products .products-grid {
+  gap: clamp(18px, 2vw, 28px);
+  align-items: stretch;
+}
+
+#products .product-card {
+  overflow: hidden;
+  border: 1px solid rgba(216, 181, 106, .18) !important;
+  border-radius: 12px;
+  background: linear-gradient(155deg, #1a201c 0%, #111613 100%) !important;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, .24);
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+#products .product-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(216, 181, 106, .52) !important;
+  box-shadow: 0 22px 46px rgba(0, 0, 0, .36);
+}
+
+#products .product-image {
+  background:
+    radial-gradient(ellipse at center, rgba(216, 181, 106, .09), transparent 68%),
+    #151a17 !important;
+}
+
+#products .product-image img {
+  filter: drop-shadow(0 14px 20px rgba(0, 0, 0, .38));
+}
+
+#products .product-info {
+  color: #f4f1e8;
+  background: #111613 !important;
+}
+
+#products .product-info .product-category {
+  color: #d8b56a !important;
+}
+
+#products .product-info h3 {
+  color: #f4f1e8 !important;
+}
+
+#products .product-info .weight {
+  color: #a2aaa3 !important;
+}
+
+#products .product-info .product-price small {
+  color: #89918a !important;
+}
+
+#products .product-info .price {
+  color: #e0bd72 !important;
+}
+
+#products .product-info .product-bottom {
+  border-top-color: rgba(255, 255, 255, .1) !important;
+}
+
+@media (max-width: 600px) {
+  #products .products-heading {
+    gap: 22px;
+  }
+
+  #products .products-count {
+    border-left: 0;
+  }
+}
