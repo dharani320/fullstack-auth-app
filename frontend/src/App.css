@@ -1724,10 +1724,11 @@ body {
 
 .footer-main {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr;
-  gap: 60px;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 40px;
   padding-bottom: 60px;
 }
+
 
 .footer-brand {
   display: flex;
