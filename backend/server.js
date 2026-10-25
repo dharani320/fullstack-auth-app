@@ -238,7 +238,7 @@ app.get("/geocode/reverse", requireUser, async (req, res) => {
     }
 
     const geoData = await providerResponse.json();
-    const result = geoData.results?.[0];
+    const result = geoData.results?.[0] || geoData.features?.[0]?.properties;
     if (!result) {
       return res.status(404).json({ error: "No address details were found for this location." });
     }
