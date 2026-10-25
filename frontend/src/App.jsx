@@ -3377,31 +3377,25 @@ const deleteProduct = async (productId) => {
       </a>
       <span>Dharmapuri, Tamil Nadu</span>
     </div>
+{/* Admin Login shown in the public footer */}
+{/* Admin Login shown in the public footer */}
+<div className="footer-admin">
+  <span className="footer-label">BUSINESS</span>
+  <button
+    className="footer-admin-button"
+    onClick={() => setShowAdminLogin(true)}
+  >
+    Admin Login
+  </button>
+</div>
 
-    {/* Admin Login hidden from the public footer */}
-    {false && (
-      <div className="footer-admin">
-        <span className="footer-label">BUSINESS</span>
-        <p>
-          Manage products, orders
-          <br />
-          and customer deliveries.
-        </p>
-        <button
-          className="footer-admin-button"
-          onClick={() => setShowAdminLogin(true)}
-        >
-          Admin Login
-        </button>
-      </div>
-    )}
-  </div>
+</div>
 
-  <div className="footer-bottom">
-    <span>© 2026 KUBARAN</span>
-    <span>PREMIUM DRY FISH & SEAFOOD</span>
-    <span>ALL RIGHTS RESERVED</span>
-  </div>
+<div className="footer-bottom">
+  <span>© 2026 KUBARAN</span>
+  <span>PREMIUM DRY FISH & SEAFOOD</span>
+  <span>ALL RIGHTS RESERVED</span>
+</div>
 </footer>
       {/* ====================================== */}
       {/* CART MODAL */}
