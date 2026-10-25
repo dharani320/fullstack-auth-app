@@ -197,6 +197,10 @@ useEffect(() => {
 
   const [products, setProducts] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
+  const [productSearch, setProductSearch] = useState("");
+  const filteredProducts = products.filter((product) =>
+    String(product.name || "").toLowerCase().includes(productSearch.trim().toLowerCase())
+  );
 
   // ==========================================
   // CUSTOMER STATE
@@ -3295,6 +3299,35 @@ const deleteProduct = async (productId) => {
 
   </div>
 
+  <div className="products-search-row">
+    <div className="products-search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" />
+        <path d="m16 16 4 4" />
+      </svg>
+      <input
+        type="search"
+        aria-label="Search products by name"
+        placeholder="Search products by name..."
+        value={productSearch}
+        onChange={(event) => setProductSearch(event.target.value)}
+      />
+      {productSearch && (
+        <button
+          type="button"
+          className="products-search-clear"
+          onClick={() => setProductSearch("")}
+          aria-label="Clear product search"
+        >
+          Clear
+        </button>
+      )}
+    </div>
+    <span className="products-search-count" aria-live="polite">
+      {filteredProducts.length} of {products.length} products
+    </span>
+  </div>
+
   {loadingProducts ? (
     <div className="loading-products">
       <p>Loading products...</p>
@@ -3303,10 +3336,14 @@ const deleteProduct = async (productId) => {
     <div className="loading-products">
       <p>No products available.</p>
     </div>
+  ) : filteredProducts.length === 0 ? (
+    <div className="loading-products products-no-results">
+      <p>No products match "{productSearch}". Try a different name.</p>
+    </div>
   ) : (
     <div className="products-grid">
 
-      {products.map((product) => (
+      {filteredProducts.map((product) => (
 
         <article
           className="product-card"
