@@ -5300,3 +5300,101 @@ section#products.products-section {
     border-left: 0;
   }
 }
+
+/* Non-blocking storefront feedback styled as part of the site. */
+.store-notification {
+  position: fixed;
+  z-index: 12000;
+  top: 96px;
+  right: clamp(16px, 4vw, 56px);
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) 30px;
+  align-items: center;
+  gap: 14px;
+  width: min(420px, calc(100vw - 32px));
+  padding: 16px 17px;
+  color: #f4f1e8;
+  background: rgba(17, 23, 20, .97);
+  border: 1px solid rgba(216, 181, 106, .42);
+  border-left: 3px solid #d8b56a;
+  border-radius: 10px;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, .42);
+  backdrop-filter: blur(14px);
+  animation: store-notification-enter .24s ease-out both;
+}
+
+.store-notification.warning {
+  border-left-color: #e0a85c;
+}
+
+.store-notification-icon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  color: #101412;
+  background: #d8b56a;
+  border-radius: 50%;
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.store-notification.warning .store-notification-icon {
+  background: #e0a85c;
+}
+
+.store-notification-copy {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.store-notification-copy strong {
+  color: #f4f1e8;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.store-notification-copy span {
+  color: #bdc4bd;
+  font-size: 13px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.store-notification-close {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  color: #aeb5ae;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-size: 23px;
+  line-height: 1;
+}
+
+.store-notification-close:hover {
+  color: #fff;
+}
+
+@keyframes store-notification-enter {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .store-notification {
+    top: 84px;
+    right: 16px;
+    left: 16px;
+    width: auto;
+    padding: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .store-notification {
+    animation: none;
+  }
+}

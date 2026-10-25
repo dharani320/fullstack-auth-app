@@ -88,6 +88,14 @@ useEffect(() => {
 
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
+  const [notification, setNotification] = useState(null);
+  const notificationTimerRef = useRef(null);
+
+  useEffect(() => () => {
+    if (notificationTimerRef.current) {
+      window.clearTimeout(notificationTimerRef.current);
+    }
+  }, []);
   const [showCheckout, setShowCheckout] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
@@ -224,6 +232,19 @@ useEffect(() => {
     return "🐟";
   };
 
+  const showNotification = (message, type = "success") => {
+    setNotification({ message, type });
+
+    if (notificationTimerRef.current) {
+      window.clearTimeout(notificationTimerRef.current);
+    }
+
+    notificationTimerRef.current = window.setTimeout(() => {
+      setNotification(null);
+      notificationTimerRef.current = null;
+    }, 3600);
+  };
+
   const getStockState = (stock) => {
     const quantity = Number(stock) || 0;
 
@@ -244,47 +265,34 @@ useEffect(() => {
 
   const addToCart = (product) => {
     if (Number(product.stock) <= 0) {
-      alert("This product is currently out of stock.");
+      showNotification("This product is currently out of stock.", "warning");
       return;
     }
 
-    setCart((currentCart) => {
-      const existing = currentCart.find(
-        (item) => item.id === product.id
-      );
+    const existingItem = cart.find((item) => item.id === product.id);
+    if (existingItem && existingItem.quantity >= Number(product.stock)) {
+      showNotification(`Only ${product.stock} item(s) available in stock.`, "warning");
+      return;
+    }
 
-      if (existing) {
-        if (
-          existing.quantity >= Number(product.stock)
-        ) {
-          alert(
-            `Only ${product.stock} item(s) available in stock.`
-          );
-
-          return currentCart;
-        }
-
-        return currentCart.map((item) =>
-          item.id === product.id
-            ? {
-                ...item,
-                quantity: item.quantity + 1,
-              }
-            : item
-        );
-      }
-
-      return [
-        ...currentCart,
+    if (existingItem) {
+      setCart(cart.map((item) =>
+        item.id === product.id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      ));
+    } else {
+      setCart([
+        ...cart,
         {
           ...product,
           price: Number(product.price),
           quantity: 1,
         },
-      ];
-    });
+      ]);
+    }
 
-    alert(`${product.name} added to cart`);
+    showNotification(`${product.name} added to your cart`);
   };
 
   const increaseQuantity = (id) => {
@@ -2938,6 +2946,29 @@ const deleteProduct = async (productId) => {
 
   return (
     <div className="app">
+      {notification && (
+        <div
+          className={`store-notification ${notification.type}`}
+          role="status"
+          aria-live="polite"
+        >
+          <span className="store-notification-icon" aria-hidden="true">
+            {notification.type === "success" ? "\u2713" : "!"}
+          </span>
+          <div className="store-notification-copy">
+            <strong>{notification.type === "success" ? "Added to cart" : "Stock notice"}</strong>
+            <span>{notification.message}</span>
+          </div>
+          <button
+            type="button"
+            className="store-notification-close"
+            onClick={() => setNotification(null)}
+            aria-label="Dismiss notification"
+          >
+            ×
+          </button>
+        </div>
+      )}
 {/* NAVBAR */}
 
 <nav className="navbar">
