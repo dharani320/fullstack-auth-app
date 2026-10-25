@@ -3344,7 +3344,7 @@ const deleteProduct = async (productId) => {
         <div><p className="eyebrow">S.04 / DELIVERY</p><h2>Good food should<br />arrive without guesswork.</h2></div>
         <div className="cta-side"><p>Place your order, follow the status and receive your dry seafood at your doorstep.</p><a href="#products" className="hero-button">Shop KUBARAN</a></div>
       </section>
-```jsx
+
 {/* FOOTER */}
 <footer className="kubaran-footer">
   <div className="footer-main">
