@@ -9,8 +9,7 @@ require("dotenv").config();
 
 const app = express();
 app.use(helmet());
-app.use(cors());
-app.use(express.json());
+
 
 const requireAdmin = (req, res, next) => {
   try {
@@ -1161,7 +1160,6 @@ app.put(
   "/orders/:id/delivery",
   requireAdmin,
   async (req, res) => {
-
     try {
       const {
         id,
