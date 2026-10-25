@@ -3344,116 +3344,66 @@ const deleteProduct = async (productId) => {
         <div><p className="eyebrow">S.04 / DELIVERY</p><h2>Good food should<br />arrive without guesswork.</h2></div>
         <div className="cta-side"><p>Place your order, follow the status and receive your dry seafood at your doorstep.</p><a href="#products" className="hero-button">Shop KUBARAN</a></div>
       </section>
-
-      {/* FOOTER */}
-
+```jsx
+{/* FOOTER */}
 <footer className="kubaran-footer">
-
   <div className="footer-main">
-
     <div className="footer-brand">
+      <div className="footer-logo">KUBARAN</div>
 
-      <div className="footer-logo">
-        KUBARAN
-      </div>
-
-      <p>
-        Premium Dry Fish & Seafood
-      </p>
+      <p>Premium Dry Fish & Seafood</p>
 
       <span>
         Traditional taste. Carefully selected.
         <br />
         Delivered to your doorstep.
       </span>
-
     </div>
 
     <div className="footer-links">
-
-      <span className="footer-label">
-        EXPLORE
-      </span>
-
-      <a href="#home">
-        Home
-      </a>
-
-      <a href="#about">
-        About KUBARAN
-      </a>
-
-      <a href="#quality">
-        Why KUBARAN
-      </a>
-
-      <a href="#products">
-        Products
-      </a>
-
+      <span className="footer-label">EXPLORE</span>
+      <a href="#home">Home</a>
+      <a href="#about">About KUBARAN</a>
+      <a href="#quality">Why KUBARAN</a>
+      <a href="#products">Products</a>
     </div>
 
     <div className="footer-contact">
-
-      <span className="footer-label">
-        CONTACT
-      </span>
-
-      <a href="tel:+919751170173">
-        +91 97511 70173
-      </a>
-
-      <a href="https://wa.me/9751170173">
-        WhatsApp
-      </a>
-
+      <span className="footer-label">CONTACT</span>
+      <a href="tel:+919751170173">+91 97511 70173</a>
+      <a href="https://wa.me/919751170173">WhatsApp</a>
       <a href="mailto:imdharani777@gmail.com">
         imdharani777@gmail.com
       </a>
-
-      <span>
-        Dharmapuri, Tamil Nadu
-      </span>
-
+      <span>Dharmapuri, Tamil Nadu</span>
     </div>
-{false && (
-  <div className="footer-admin">
-    <span className="footer-label">
-      BUSINESS
-    </span>
 
-    <p>
-      Manage products, orders
-      <br />
-      and customer deliveries.
-    </p>
-
-    <button
-      className="footer-admin-button"
-      onClick={() => setShowAdminLogin(true)}
-    >
-      Admin Login
-    </button>
+    {/* Admin Login hidden from the public footer */}
+    {false && (
+      <div className="footer-admin">
+        <span className="footer-label">BUSINESS</span>
+        <p>
+          Manage products, orders
+          <br />
+          and customer deliveries.
+        </p>
+        <button
+          className="footer-admin-button"
+          onClick={() => setShowAdminLogin(true)}
+        >
+          Admin Login
+        </button>
+      </div>
+    )}
   </div>
-)}
 
   <div className="footer-bottom">
-
-    <span>
-      © 2026 KUBARAN
-    </span>
-
-    <span>
-      PREMIUM DRY FISH & SEAFOOD
-    </span>
-
-    <span>
-      ALL RIGHTS RESERVED
-    </span>
-
+    <span>© 2026 KUBARAN</span>
+    <span>PREMIUM DRY FISH & SEAFOOD</span>
+    <span>ALL RIGHTS RESERVED</span>
   </div>
-
 </footer>
+```
       {/* ====================================== */}
       {/* CART MODAL */}
       {/* ====================================== */}
