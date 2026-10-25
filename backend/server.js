@@ -1159,7 +1159,9 @@ app.put(
 
 app.put(
   "/orders/:id/delivery",
+  requireAdmin,
   async (req, res) => {
+
     try {
       const {
         id,
