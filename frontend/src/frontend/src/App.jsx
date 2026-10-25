@@ -3027,6 +3027,7 @@ const deleteProduct = async (productId) => {
   <div className="hero-image-overlay"></div>
 
   <div className="hero-content">
+    <p className="hero-brand-name">KUBARAN SEAFOOD</p>
     <h1>
       Traditional Taste.
       <br />
@@ -3185,7 +3186,6 @@ const deleteProduct = async (productId) => {
     {/* QUALITY */}
 <section className="kubaran-quality" id="quality">
   <div className="quality-heading">
-    <div className="story-index">S.03</div>
 
     <div>
       <p className="eyebrow">WHY KUBARAN</p>
@@ -3254,7 +3254,7 @@ const deleteProduct = async (productId) => {
 
       {/* DELIVERY CTA */}
       <section className="kubaran-cta">
-        <div><p className="eyebrow">S.04 / DELIVERY</p><h2>Good food should<br />arrive without guesswork.</h2></div>
+        <div><p className="eyebrow">DELIVERY</p><h2>Good food should<br />arrive without guesswork.</h2></div>
         <div className="cta-side"><p>Place your order, follow the status and receive your dry seafood at your doorstep.</p><a href="#products" className="hero-button">Shop KUBARAN</a></div>
       </section>
 

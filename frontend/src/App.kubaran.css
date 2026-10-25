@@ -304,15 +304,7 @@ body {
   line-height: .8;
 }
 .hero-content { max-width: 950px; position: relative; z-index: 2; }
-.hero-content::before {
-  content: "S.00 / KUBARAN SEAFOOD";
-  display: block;
-  margin-bottom: 22px;
-  color: var(--kubaran-accent);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: .22em;
-}
+
 .hero-content h1 {
   margin: 0;
   max-width: 1000px;
@@ -5128,4 +5120,27 @@ background: #d8b56a;
   color: #e4dfd3;
   font-size: 10px;
   letter-spacing: 0.12em;
+}
+
+/* Clear section numbering and give the brand a strong hero presence. */
+.hero-content .hero-brand-name {
+  width: fit-content;
+  margin: 0 0 clamp(16px, 2.4vw, 30px);
+  color: #d8b56a;
+  font-size: clamp(30px, 4.2vw, 58px);
+  font-weight: 800;
+  letter-spacing: .085em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.quality-heading {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+@media (max-width: 600px) {
+  .hero-content .hero-brand-name {
+    font-size: clamp(28px, 8vw, 40px);
+    letter-spacing: .06em;
+  }
 }
