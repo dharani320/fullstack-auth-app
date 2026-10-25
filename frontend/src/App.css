@@ -4903,6 +4903,18 @@ body {
   font-size: 11px !important;
 }
 
+.address-geocoding-attribution {
+  margin: 6px 0 0 !important;
+  color: #808982 !important;
+  font-size: 10px !important;
+}
+
+.address-geocoding-attribution a {
+  color: #d8b56a !important;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .address-map-actions {
   display: grid;
   grid-template-columns: 1fr;

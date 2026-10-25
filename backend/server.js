@@ -211,82 +211,67 @@ app.get("/geocode/reverse", requireUser, async (req, res) => {
     return res.status(400).json({ error: "Valid latitude and longitude are required." });
   }
 
-  const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+  const apiKey = process.env.GEOAPIFY_API_KEY;
   if (!apiKey) {
     return res.status(503).json({
-      error: "Address lookup is not configured. Add GOOGLE_MAPS_API_KEY to the backend environment.",
+      error: "Address lookup is not configured. Add GEOAPIFY_API_KEY to the backend environment.",
     });
   }
 
   try {
-    const url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
-    url.searchParams.set("latlng", `${latitude},${longitude}`);
-    url.searchParams.set("key", apiKey);
-    url.searchParams.set("language", "en");
-    url.searchParams.set("region", "IN");
+    const url = new URL("https://api.geoapify.com/v1/geocode/reverse");
+    url.searchParams.set("lat", String(latitude));
+    url.searchParams.set("lon", String(longitude));
+    url.searchParams.set("format", "json");
+    url.searchParams.set("lang", "en");
+    url.searchParams.set("apiKey", apiKey);
 
-    const googleResponse = await fetch(url, {
+    const providerResponse = await fetch(url, {
       signal: AbortSignal.timeout(8000),
     });
 
-    if (!googleResponse.ok) {
-      return res.status(502).json({ error: "Google address lookup is temporarily unavailable." });
-    }
-
-    const googleData = await googleResponse.json();
-    if (googleData.status !== "OK" || !googleData.results?.length) {
-      if (googleData.status === "ZERO_RESULTS") {
-        return res.status(404).json({ error: "No address details were found for this location." });
-      }
-
-      console.error("GOOGLE REVERSE GEOCODING STATUS:", googleData.status);
+    if (!providerResponse.ok) {
+      console.error("GEOAPIFY REVERSE GEOCODING STATUS:", providerResponse.status);
       return res.status(502).json({
-        error: "Google could not look up this address. Check the API key, Geocoding API, and billing settings.",
+        error: "Geoapify address lookup is unavailable. Check the API key and free-plan request limit.",
       });
     }
 
-    const result = googleData.results[0];
-    const components = result.address_components || [];
-    const findComponent = (...wantedTypes) =>
-      components.find((component) =>
-        wantedTypes.some((type) => component.types.includes(type))
-      )?.long_name || "";
+    const geoData = await providerResponse.json();
+    const result = geoData.results?.[0];
+    if (!result) {
+      return res.status(404).json({ error: "No address details were found for this location." });
+    }
 
-    const addressParts = [
-      findComponent("street_number"),
-      findComponent("route"),
-      findComponent("premise"),
-      findComponent("subpremise"),
-      findComponent("neighborhood"),
-      findComponent("sublocality_level_2"),
-      findComponent("sublocality_level_1", "sublocality"),
-    ].filter((part, index, allParts) => part && allParts.indexOf(part) === index);
-
-    const address = addressParts.join(", ") || result.formatted_address || "";
+    const address =
+      result.address_line1 ||
+      [result.housenumber, result.street].filter(Boolean).join(" ") ||
+      result.formatted ||
+      "";
     const city =
-      findComponent("locality") ||
-      findComponent("postal_town") ||
-      findComponent("administrative_area_level_3") ||
-      findComponent("sublocality_level_1") ||
-      findComponent("administrative_area_level_2");
-    const pinCode = findComponent("postal_code");
+      result.city ||
+      result.town ||
+      result.village ||
+      result.city_district ||
+      result.county ||
+      "";
 
     return res.json({
       address,
       city,
-      pinCode,
-      formattedAddress: result.formatted_address || "",
+      pinCode: result.postcode || "",
+      formattedAddress: result.formatted || "",
+      state: result.state || "",
     });
   } catch (error) {
     if (error.name === "TimeoutError" || error.name === "AbortError") {
       return res.status(504).json({ error: "Address lookup timed out. Please try again." });
     }
 
-    console.error("GOOGLE REVERSE GEOCODING REQUEST FAILED");
+    console.error("GEOAPIFY REVERSE GEOCODING REQUEST FAILED");
     return res.status(502).json({ error: "Address lookup failed. Please enter your address manually." });
   }
 });
-
 // CUSTOMER LOGIN
 // ==========================================
 

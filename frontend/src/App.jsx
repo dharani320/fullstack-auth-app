@@ -3978,6 +3978,9 @@ const deleteProduct = async (productId) => {
                     <button type="button" onClick={previewCurrentLocation}>Use my location</button>
                   </div>
                   <p className="address-map-help">Click the map or drag the pin to mark the delivery point. Location access is optional.</p>
+                  <p className="address-geocoding-attribution">
+                    Address lookup by <a href="https://www.geoapify.com/" target="_blank" rel="noreferrer">Geoapify</a>
+                  </p>
                 </section>
 
                 <section className="address-details-column" aria-label="Delivery details">
