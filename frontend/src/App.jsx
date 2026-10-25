@@ -3403,7 +3403,6 @@ const deleteProduct = async (productId) => {
     <span>ALL RIGHTS RESERVED</span>
   </div>
 </footer>
-```
       {/* ====================================== */}
       {/* CART MODAL */}
       {/* ====================================== */}
