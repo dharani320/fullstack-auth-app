@@ -3216,14 +3216,18 @@ const deleteProduct = async (productId) => {
   <div className="hero-image-overlay"></div>
 
   <div className="hero-content">
-    <p className="hero-brand-name">KUBARAN SEAFOOD</p>
-    <h1>
+    <h1 className="hero-brand-name">
+      <span>KUBARAN</span>
+      <span>SEAFOOD</span>
+    </h1>
+
+    <h2 className="hero-tagline">
       Traditional Taste.
       <br />
       Premium Quality.
-    </h1>
+    </h2>
 
-    <p>
+    <p className="hero-description">
       Premium quality dry fish
       and dry seafood delivered
       to your doorstep.

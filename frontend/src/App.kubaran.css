@@ -5144,3 +5144,58 @@ background: #d8b56a;
     letter-spacing: .06em;
   }
 }
+
+/* Make KUBARAN SEAFOOD the clear, responsive hero headline. */
+.kubaran-hero .hero-content {
+  width: min(92%, 1120px);
+  max-width: 1120px;
+}
+
+.kubaran-hero .hero-content h1.hero-brand-name {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 0 clamp(22px, 3vw, 38px) !important;
+  color: #d8b56a !important;
+  font-size: clamp(58px, 9.4vw, 144px) !important;
+  font-weight: 900 !important;
+  line-height: .82 !important;
+  letter-spacing: -.065em !important;
+  text-shadow: 0 8px 36px rgba(216, 181, 106, .12);
+  text-wrap: balance;
+}
+
+.kubaran-hero .hero-content h1.hero-brand-name span {
+  display: block;
+}
+
+.kubaran-hero .hero-content .hero-tagline {
+  max-width: 780px;
+  margin: 0 0 clamp(18px, 2.4vw, 30px) !important;
+  color: #f5f1e8;
+  font-size: clamp(28px, 4.1vw, 54px) !important;
+  font-weight: 650;
+  line-height: 1.04 !important;
+  letter-spacing: -.045em;
+}
+
+.kubaran-hero .hero-content .hero-description {
+  max-width: 500px;
+  margin: 0 0 28px !important;
+  font-size: clamp(15px, 1.35vw, 18px);
+  line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+  .kubaran-hero .hero-content {
+    width: min(90%, 480px);
+  }
+
+  .kubaran-hero .hero-content h1.hero-brand-name {
+    font-size: clamp(52px, 14vw, 78px) !important;
+    margin-bottom: 24px !important;
+  }
+
+  .kubaran-hero .hero-content .hero-tagline {
+    font-size: clamp(27px, 7vw, 36px) !important;
+  }
+}
