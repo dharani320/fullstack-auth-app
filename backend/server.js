@@ -911,7 +911,7 @@ app.get(
 // Includes automatic stock restoration
 // when an order is cancelled.
 app.put(
-  "/orders/:id/delivery-details",
+  "/orders/:id/status",
   requireAdmin,
   async (req, res) => {
     const {
