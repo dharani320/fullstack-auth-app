@@ -4816,6 +4816,193 @@ body {
   transform: none;
   box-shadow: none;
 }
+
+/* Map-assisted delivery address selection */
+.address-checkout-modal {
+  width: min(960px, 96vw) !important;
+  max-width: 960px !important;
+}
+
+.address-checkout-heading {
+  margin: 0 0 20px;
+  padding-right: 32px;
+}
+
+.address-checkout-heading h2 {
+  margin: 0 0 8px;
+}
+
+.address-checkout-heading p {
+  margin: 0;
+}
+
+.address-checkout-heading .address-checkout-eyebrow {
+  margin: 0 0 10px;
+  color: #d8b56a;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .14em;
+}
+
+.address-checkout-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.address-map-column,
+.address-details-column {
+  min-width: 0;
+}
+
+.address-details-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.address-map-frame {
+  overflow: hidden;
+  min-height: 360px;
+  border: 1px solid rgba(216, 181, 106, .28);
+  border-radius: 4px;
+  background: #17201d;
+}
+
+.address-map-frame iframe {
+  display: block;
+  width: 100%;
+  height: 360px;
+  border: 0;
+}
+
+.delivery-address-map {
+  width: 100%;
+  height: 360px;
+  background: #17201d;
+}
+
+.leaflet-map-status {
+  margin: 0 !important;
+  padding: 7px 10px;
+  background: #080b0b;
+  color: #aeb4ae !important;
+  font-size: 11px !important;
+}
+
+.address-map-message,
+.address-map-help {
+  margin: 10px 0 0 !important;
+  color: #aeb4ae !important;
+  font-size: 12px !important;
+}
+
+.address-map-help {
+  color: #808982 !important;
+  font-size: 11px !important;
+}
+
+.address-map-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.address-map-actions button,
+.address-type-picker button {
+  min-height: 42px;
+  border: 1px solid rgba(216, 181, 106, .38);
+  border-radius: 4px;
+  background: rgba(216, 181, 106, .07);
+  color: #e8d7ad;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.address-map-actions button:hover,
+.address-type-picker button:hover {
+  border-color: #d8b56a;
+  background: rgba(216, 181, 106, .14);
+}
+
+.address-type-picker {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.address-type-picker button.selected {
+  border-color: #d8b56a;
+  background: #d8b56a;
+  color: #101312;
+}
+
+.address-location-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.address-checkout-form .address-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 13px;
+  color: #aeb4ae;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.address-checkout-form .address-field input,
+.address-checkout-form .address-field textarea {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+}
+
+.address-checkout-form .address-field textarea {
+  min-height: 88px;
+}
+
+.address-checkout-form .checkout-summary,
+.address-checkout-form > button[type="submit"] {
+  grid-column: 1 / -1;
+}
+
+.address-checkout-form > button[type="submit"] {
+  width: 100%;
+}
+
+@media (max-width: 720px) {
+  .address-checkout-modal {
+    width: min(560px, 94vw) !important;
+    max-height: 92vh;
+    padding: 25px !important;
+  }
+
+  .address-checkout-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .address-map-frame,
+  .delivery-address-map {
+    min-height: 250px;
+    height: 250px;
+  }
+}
+
+@media (max-width: 420px) {
+  .address-map-actions,
+  .address-location-fields {
+    grid-template-columns: 1fr;
+  }
+}
 /* =========================
    PREMIUM FOOTER
    ========================= */

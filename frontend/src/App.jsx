@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 import "./App.kubaran.css";
 import anchovyImage from "./assets/anchovy.png";
@@ -19,6 +19,123 @@ const trackingStatuses = [
 const getStatusIndex = (status) => {
   return trackingStatuses.indexOf(status);
 };
+
+const loadLeaflet = () => {
+  if (window.L) return Promise.resolve(window.L);
+
+  if (!document.getElementById("leaflet-map-css")) {
+    const stylesheet = document.createElement("link");
+    stylesheet.id = "leaflet-map-css";
+    stylesheet.rel = "stylesheet";
+    stylesheet.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+    stylesheet.integrity = "sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=";
+    stylesheet.crossOrigin = "";
+    document.head.appendChild(stylesheet);
+  }
+
+  return new Promise((resolve, reject) => {
+    let script = document.getElementById("leaflet-map-script");
+    const handleLoad = () => window.L ? resolve(window.L) : reject(new Error("Map library did not load."));
+    const handleError = () => reject(new Error("Map library could not be loaded."));
+
+    if (!script) {
+      script = document.createElement("script");
+      script.id = "leaflet-map-script";
+      script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+      script.integrity = "sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=";
+      script.crossOrigin = "";
+      script.addEventListener("load", handleLoad, { once: true });
+      script.addEventListener("error", handleError, { once: true });
+      document.head.appendChild(script);
+      return;
+    }
+
+    script.addEventListener("load", handleLoad, { once: true });
+    script.addEventListener("error", handleError, { once: true });
+  });
+};
+
+function DeliveryMap({ pin, onPinSelect }) {
+  const containerRef = useRef(null);
+  const mapRef = useRef(null);
+  const markerRef = useRef(null);
+  const callbackRef = useRef(onPinSelect);
+  const pinRef = useRef(pin);
+  const [status, setStatus] = useState("Loading map...");
+
+  callbackRef.current = onPinSelect;
+  pinRef.current = pin;
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const initializeMap = async () => {
+      try {
+        const L = await loadLeaflet();
+        if (cancelled || !containerRef.current) return;
+
+        const map = L.map(containerRef.current).setView([11.0168, 76.9558], 13);
+        mapRef.current = map;
+
+        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 19,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap contributors</a>',
+        }).addTo(map);
+
+        const placePin = (location, notify = true) => {
+          const coordinates = [location.lat, location.lng];
+          if (!markerRef.current) {
+            markerRef.current = L.marker(coordinates, { draggable: true }).addTo(map);
+            markerRef.current.on("dragend", () => {
+              const point = markerRef.current.getLatLng();
+              callbackRef.current({ latitude: point.lat, longitude: point.lng });
+            });
+          } else {
+            markerRef.current.setLatLng(coordinates);
+          }
+          if (notify) {
+            callbackRef.current({ latitude: location.lat, longitude: location.lng });
+          }
+        };
+
+        map.on("click", (event) => placePin(event.latlng));
+        mapRef.current.placePin = (location) => placePin(location, false);
+        setStatus("Click the map to drop a pin, or drag the pin to adjust it.");
+
+        if (pinRef.current) {
+          placePin({ lat: pinRef.current.latitude, lng: pinRef.current.longitude }, false);
+          map.setView([pinRef.current.latitude, pinRef.current.longitude], 16);
+        }
+      } catch {
+        if (!cancelled) setStatus("The map could not load. You can still enter your address manually.");
+      }
+    };
+
+    initializeMap();
+
+    return () => {
+      cancelled = true;
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+        markerRef.current = null;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!pin || !mapRef.current?.placePin) return;
+    mapRef.current.placePin({ lat: pin.latitude, lng: pin.longitude });
+    mapRef.current.setView([pin.latitude, pin.longitude], 16);
+  }, [pin]);
+
+  return (
+    <>
+      <div className="delivery-address-map" ref={containerRef} aria-label="Interactive delivery map" />
+      <p className="leaflet-map-status" role="status">{status}</p>
+    </>
+  );
+}
 
 function App() {
  
@@ -112,6 +229,9 @@ useEffect(() => {
     city: "",
     pinCode: "",
   });
+  const [addressType, setAddressType] = useState("Home");
+  const [mapPin, setMapPin] = useState(null);
+  const [mapMessage, setMapMessage] = useState("Click the map to choose your delivery pin.");
 
   const [placing, setPlacing] = useState(false);
 
@@ -810,9 +930,31 @@ const response = await fetch(
       city: "",
       pinCode: "",
     });
+    setAddressType("Home");
+    setMapPin(null);
+    setMapMessage("Click the map to choose your delivery pin.");
 
     setShowCart(false);
     setShowCheckout(true);
+  };
+
+  const previewCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      setMapMessage("Location is not available in this browser. Enter your address manually.");
+      return;
+    }
+
+    setMapMessage("Finding your location…");
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        setMapPin({ latitude: coords.latitude, longitude: coords.longitude });
+        setMapMessage("Pin placed at your current location. Add your house or street details too.");
+      },
+      () => {
+        setMapMessage("Could not access your location. Check browser permission or enter your address manually.");
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
   };
 
   // ==========================================
@@ -846,8 +988,12 @@ const response = await fetch(
         phone:
           checkoutForm.phone,
 
-        address:
-          checkoutForm.address,
+        address: [
+          `${addressType}: ${checkoutForm.address.trim()}`,
+          mapPin
+            ? `Map pin: ${mapPin.latitude.toFixed(6)}, ${mapPin.longitude.toFixed(6)}`
+            : "",
+        ].filter(Boolean).join("\n"),
 
         city:
           checkoutForm.city,
@@ -3749,7 +3895,7 @@ const deleteProduct = async (productId) => {
       {showCheckout && (
         <div className="modal-overlay">
 
-          <div className="modal checkout-modal">
+          <div className="modal checkout-modal address-checkout-modal">
 
             <button
               className="close-button"
@@ -3760,18 +3906,55 @@ const deleteProduct = async (productId) => {
               ×
             </button>
 
-            <h2>
-              Checkout
-            </h2>
+            <div className="address-checkout-heading">
+              <p className="address-checkout-eyebrow">DELIVERY ADDRESS</p>
+              <h2>Add Address Details</h2>
+              <p>Choose a place on the map or enter the full address where you want your order delivered.</p>
+            </div>
 
             <form
+              className="address-checkout-form"
               onSubmit={
                 handlePlaceOrder
               }
             >
+              <div className="address-checkout-grid">
+                <section className="address-map-column" aria-label="Map preview">
+                  <div className="address-map-frame">
+                    <DeliveryMap
+                      pin={mapPin}
+                      onPinSelect={(pin) => {
+                        setMapPin(pin);
+                        setMapMessage(`Pin selected: ${pin.latitude.toFixed(6)}, ${pin.longitude.toFixed(6)}`);
+                      }}
+                    />
+                  </div>
+                  <p className="address-map-message" role="status">{mapMessage}</p>
+                  <div className="address-map-actions">
+                    <button type="button" onClick={previewCurrentLocation}>Use my location</button>
+                  </div>
+                  <p className="address-map-help">Click the map or drag the pin to mark the delivery point. Location access is optional.</p>
+                </section>
+
+                <section className="address-details-column" aria-label="Delivery details">
+                  <div className="address-type-picker" role="group" aria-label="Address type">
+                    {["Home", "Office", "Other"].map((type) => (
+                      <button
+                        key={type}
+                        type="button"
+                        className={addressType === type ? "selected" : ""}
+                        aria-pressed={addressType === type}
+                        onClick={() => setAddressType(type)}
+                      >
+                        {type} {addressType === type ? "✓" : ""}
+                      </button>
+                    ))}
+                  </div>
 
               <input
                 type="text"
+                aria-label="Customer name"
+                autoComplete="name"
                 placeholder="Customer Name"
                 value={
                   checkoutForm.customerName
@@ -3788,6 +3971,8 @@ const deleteProduct = async (productId) => {
 
               <input
                 type="tel"
+                aria-label="Phone number"
+                autoComplete="tel"
                 placeholder="Phone Number"
                 value={
                   checkoutForm.phone
@@ -3803,6 +3988,8 @@ const deleteProduct = async (productId) => {
               />
 
               <textarea
+                aria-label="House, street, area, and landmark"
+                autoComplete="street-address"
                 placeholder="Full Address"
                 value={
                   checkoutForm.address
@@ -3817,8 +4004,11 @@ const deleteProduct = async (productId) => {
                 required
               />
 
+              <div className="address-location-fields">
               <input
                 type="text"
+                aria-label="City"
+                autoComplete="address-level2"
                 placeholder="City"
                 value={
                   checkoutForm.city
@@ -3835,6 +4025,9 @@ const deleteProduct = async (productId) => {
 
               <input
                 type="text"
+                aria-label="PIN code"
+                autoComplete="postal-code"
+                inputMode="numeric"
                 placeholder="PIN Code"
                 value={
                   checkoutForm.pinCode
@@ -3848,6 +4041,9 @@ const deleteProduct = async (productId) => {
                 }
                 required
               />
+              </div>
+                </section>
+              </div>
 
               <div className="checkout-summary">
 
