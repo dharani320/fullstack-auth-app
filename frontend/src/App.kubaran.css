@@ -5841,3 +5841,150 @@ section#products.products-section {
     align-self: flex-end;
   }
 }
+
+/* Shared alignment for collection and quality sections. */
+#products .products-heading,
+#products .products-search-row,
+#products .products-grid,
+.kubaran-quality .quality-heading,
+.kubaran-quality .quality-grid {
+  width: min(100%, 1200px);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+#products .products-heading {
+  align-items: flex-end;
+  gap: clamp(24px, 4vw, 56px);
+  margin-bottom: 30px;
+}
+
+#products .products-heading h2,
+.kubaran-quality .quality-heading h2 {
+  font-size: clamp(36px, 4.2vw, 58px) !important;
+  line-height: 1.05;
+  letter-spacing: -.04em;
+}
+
+#products .products-intro,
+.kubaran-quality .quality-intro {
+  max-width: 600px;
+  line-height: 1.7;
+}
+
+#products .products-search-row {
+  margin-bottom: 28px;
+}
+
+#products .products-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2vw, 26px);
+  align-items: stretch;
+}
+
+#products .product-card {
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  flex-direction: column;
+}
+
+#products .product-image {
+  flex: 0 0 340px;
+  height: 340px;
+  min-height: 340px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#products .product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+#products .product-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+#products .product-info h3 {
+  min-height: 2.4em;
+  line-height: 1.2;
+}
+
+#products .product-info .weight {
+  min-height: 1.5em;
+}
+
+#products .product-info .product-bottom {
+  margin-top: auto;
+}
+
+.kubaran-quality {
+  padding-left: clamp(24px, 6vw, 96px);
+  padding-right: clamp(24px, 6vw, 96px);
+}
+
+.kubaran-quality .quality-heading {
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 0;
+  margin-bottom: 52px;
+}
+
+.kubaran-quality .quality-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  background: transparent;
+}
+
+.kubaran-quality .quality-grid article {
+  min-width: 0;
+  min-height: 250px;
+  padding: 26px 22px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  #products .product-image {
+    flex-basis: 260px;
+    height: 260px;
+    min-height: 260px;
+  }
+
+  .kubaran-quality .quality-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  #products .products-heading {
+    align-items: flex-start;
+    margin-bottom: 24px;
+  }
+
+  #products .product-image {
+    flex-basis: 150px;
+    height: 150px !important;
+    min-height: 150px;
+    padding: 8px;
+  }
+
+  #products .product-info h3 {
+    min-height: 2.4em;
+    font-size: 17px;
+  }
+
+  .kubaran-quality .quality-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kubaran-quality .quality-grid article {
+    min-height: 0;
+  }
+}
