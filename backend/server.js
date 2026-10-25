@@ -196,6 +196,97 @@ const requireUser = (req, res, next) => {
 };
 
 // ==========================================
+// REVERSE GEOCODE CUSTOMER DELIVERY LOCATION
+// ==========================================
+app.get("/geocode/reverse", requireUser, async (req, res) => {
+  const latitude = Number(req.query.lat);
+  const longitude = Number(req.query.lon);
+
+  if (
+    !Number.isFinite(latitude) ||
+    !Number.isFinite(longitude) ||
+    latitude < -90 || latitude > 90 ||
+    longitude < -180 || longitude > 180
+  ) {
+    return res.status(400).json({ error: "Valid latitude and longitude are required." });
+  }
+
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+  if (!apiKey) {
+    return res.status(503).json({
+      error: "Address lookup is not configured. Add GOOGLE_MAPS_API_KEY to the backend environment.",
+    });
+  }
+
+  try {
+    const url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
+    url.searchParams.set("latlng", `${latitude},${longitude}`);
+    url.searchParams.set("key", apiKey);
+    url.searchParams.set("language", "en");
+    url.searchParams.set("region", "IN");
+
+    const googleResponse = await fetch(url, {
+      signal: AbortSignal.timeout(8000),
+    });
+
+    if (!googleResponse.ok) {
+      return res.status(502).json({ error: "Google address lookup is temporarily unavailable." });
+    }
+
+    const googleData = await googleResponse.json();
+    if (googleData.status !== "OK" || !googleData.results?.length) {
+      if (googleData.status === "ZERO_RESULTS") {
+        return res.status(404).json({ error: "No address details were found for this location." });
+      }
+
+      console.error("GOOGLE REVERSE GEOCODING STATUS:", googleData.status);
+      return res.status(502).json({
+        error: "Google could not look up this address. Check the API key, Geocoding API, and billing settings.",
+      });
+    }
+
+    const result = googleData.results[0];
+    const components = result.address_components || [];
+    const findComponent = (...wantedTypes) =>
+      components.find((component) =>
+        wantedTypes.some((type) => component.types.includes(type))
+      )?.long_name || "";
+
+    const addressParts = [
+      findComponent("street_number"),
+      findComponent("route"),
+      findComponent("premise"),
+      findComponent("subpremise"),
+      findComponent("neighborhood"),
+      findComponent("sublocality_level_2"),
+      findComponent("sublocality_level_1", "sublocality"),
+    ].filter((part, index, allParts) => part && allParts.indexOf(part) === index);
+
+    const address = addressParts.join(", ") || result.formatted_address || "";
+    const city =
+      findComponent("locality") ||
+      findComponent("postal_town") ||
+      findComponent("administrative_area_level_3") ||
+      findComponent("sublocality_level_1") ||
+      findComponent("administrative_area_level_2");
+    const pinCode = findComponent("postal_code");
+
+    return res.json({
+      address,
+      city,
+      pinCode,
+      formattedAddress: result.formatted_address || "",
+    });
+  } catch (error) {
+    if (error.name === "TimeoutError" || error.name === "AbortError") {
+      return res.status(504).json({ error: "Address lookup timed out. Please try again." });
+    }
+
+    console.error("GOOGLE REVERSE GEOCODING REQUEST FAILED");
+    return res.status(502).json({ error: "Address lookup failed. Please enter your address manually." });
+  }
+});
+
 // CUSTOMER LOGIN
 // ==========================================
 
@@ -427,7 +518,7 @@ app.post("/products", requireAdmin, async (req, res) => {
         name,
         Number(price),
         weight || "",
-        emoji || "🐟",
+        emoji || "\u{1F41F}",
         Number(stock),
       ]
     );
@@ -510,7 +601,7 @@ app.put("/products/:id", requireAdmin, async (req, res) => {
             name,
             Number(price),
             weight || "",
-            emoji || "🐟",
+            emoji || "\u{1F41F}",
             Number(stock),
             id,
           ]

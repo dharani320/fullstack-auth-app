@@ -232,6 +232,7 @@ useEffect(() => {
   const [addressType, setAddressType] = useState("Home");
   const [mapPin, setMapPin] = useState(null);
   const [mapMessage, setMapMessage] = useState("Click the map to choose your delivery pin.");
+  const geocodeRequestSequence = useRef(0);
 
   const [placing, setPlacing] = useState(false);
 
@@ -938,6 +939,48 @@ const response = await fetch(
     setShowCheckout(true);
   };
 
+  const lookupAddressFromCoordinates = async (latitude, longitude) => {
+    const requestSequence = ++geocodeRequestSequence.current;
+    const token = localStorage.getItem("kubaran_user_token");
+
+    if (!token) {
+      setMapMessage("Please sign in again to look up this address.");
+      return;
+    }
+
+    setMapMessage("Finding the street address, city, and PIN code...");
+
+    try {
+      const response = await fetch(
+        `${API_URL}/geocode/reverse?lat=${encodeURIComponent(latitude)}&lon=${encodeURIComponent(longitude)}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Could not look up this address.");
+      }
+
+      if (requestSequence !== geocodeRequestSequence.current) return;
+
+      setCheckoutForm((current) => ({
+        ...current,
+        address: data.address || current.address,
+        city: data.city || current.city,
+        pinCode: data.pinCode || current.pinCode,
+      }));
+      const missingFields = [!data.address, !data.city, !data.pinCode].filter(Boolean).length;
+      setMapMessage(
+        missingFields === 0
+          ? "Address, city, and PIN filled. Review them and add your house or apartment number if needed."
+          : "Some address details were found. Please review the fields and fill in anything missing."
+      );
+    } catch (error) {
+      if (requestSequence !== geocodeRequestSequence.current) return;
+      setMapMessage(error.message || "Address lookup failed. Please enter the address manually.");
+    }
+  };
+
   const previewCurrentLocation = () => {
     if (!navigator.geolocation) {
       setMapMessage("Location is not available in this browser. Enter your address manually.");
@@ -947,8 +990,9 @@ const response = await fetch(
     setMapMessage("Finding your location…");
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
-        setMapPin({ latitude: coords.latitude, longitude: coords.longitude });
-        setMapMessage("Pin placed at your current location. Add your house or street details too.");
+        const pin = { latitude: coords.latitude, longitude: coords.longitude };
+        setMapPin(pin);
+        lookupAddressFromCoordinates(pin.latitude, pin.longitude);
       },
       () => {
         setMapMessage("Could not access your location. Check browser permission or enter your address manually.");
@@ -3925,7 +3969,7 @@ const deleteProduct = async (productId) => {
                       pin={mapPin}
                       onPinSelect={(pin) => {
                         setMapPin(pin);
-                        setMapMessage(`Pin selected: ${pin.latitude.toFixed(6)}, ${pin.longitude.toFixed(6)}`);
+                        lookupAddressFromCoordinates(pin.latitude, pin.longitude);
                       }}
                     />
                   </div>
