@@ -3238,90 +3238,6 @@ const deleteProduct = async (productId) => {
   </div>
 </section>
 
-     {/* ABOUT / BRAND STORY */}
-
-<section className="kubaran-about" id="about">
-
-  <div className="about-index">
-    S.01
-  </div>
-
-  <div className="about-content">
-
-    <div className="about-heading">
-
-      <p className="about-eyebrow">
-        THE KUBARAN STORY
-      </p>
-
-      <h2>
-        Tradition
-        <br />
-        with purpose.
-      </h2>
-
-      <p className="about-tagline">
-        Authentic dry seafood, thoughtfully selected
-        for today's homes.
-      </p>
-
-    </div>
-
-    <div className="about-text">
-
-      <p className="about-lead">
-        KUBARAN brings the authentic taste of
-        traditional dry fish and seafood directly
-        to your doorstep.
-      </p>
-
-      <p>
-        We believe good food starts with good
-        ingredients. Our collection focuses on
-        carefully selected seafood, traditional
-        preparation and thoughtful packaging,
-        bringing familiar coastal flavours to
-        everyday cooking.
-      </p>
-
-      <p>
-        From choosing your product to tracking
-        your delivery, we aim to make the entire
-        experience simple, clear and dependable.
-      </p>
-
-      <div className="about-values">
-
-        <div>
-          <strong>01</strong>
-          <span>QUALITY SEAFOOD</span>
-        </div>
-
-        <div>
-          <strong>02</strong>
-          <span>CAREFUL PACKAGING</span>
-        </div>
-
-        <div>
-          <strong>03</strong>
-          <span>RELIABLE DELIVERY</span>
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-      {/* STORY STATS */}
-      <section className="kubaran-stats" aria-label="KUBARAN highlights">
-        <div className="kubaran-stat"><strong>100%</strong><span>Traditional preparation</span></div>
-        <div className="kubaran-stat"><strong>Fresh</strong><span>Carefully selected seafood</span></div>
-        <div className="kubaran-stat"><strong>250g</strong><span>Convenient family packs</span></div>
-        <div className="kubaran-stat"><strong>Doorstep</strong><span>Delivery you can track</span></div>
-      </section>
-
      {/* PRODUCTS */}
 <section className="products-section" id="products">
 
@@ -3458,6 +3374,90 @@ const deleteProduct = async (productId) => {
   )}
 
 </section>
+
+     {/* ABOUT / BRAND STORY */}
+
+<section className="kubaran-about" id="about">
+
+  <div className="about-index">
+    S.01
+  </div>
+
+  <div className="about-content">
+
+    <div className="about-heading">
+
+      <p className="about-eyebrow">
+        THE KUBARAN STORY
+      </p>
+
+      <h2>
+        Tradition
+        <br />
+        with purpose.
+      </h2>
+
+      <p className="about-tagline">
+        Authentic dry seafood, thoughtfully selected
+        for today's homes.
+      </p>
+
+    </div>
+
+    <div className="about-text">
+
+      <p className="about-lead">
+        KUBARAN brings the authentic taste of
+        traditional dry fish and seafood directly
+        to your doorstep.
+      </p>
+
+      <p>
+        We believe good food starts with good
+        ingredients. Our collection focuses on
+        carefully selected seafood, traditional
+        preparation and thoughtful packaging,
+        bringing familiar coastal flavours to
+        everyday cooking.
+      </p>
+
+      <p>
+        From choosing your product to tracking
+        your delivery, we aim to make the entire
+        experience simple, clear and dependable.
+      </p>
+
+      <div className="about-values">
+
+        <div>
+          <strong>01</strong>
+          <span>QUALITY SEAFOOD</span>
+        </div>
+
+        <div>
+          <strong>02</strong>
+          <span>CAREFUL PACKAGING</span>
+        </div>
+
+        <div>
+          <strong>03</strong>
+          <span>RELIABLE DELIVERY</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+      {/* STORY STATS */}
+      <section className="kubaran-stats" aria-label="KUBARAN highlights">
+        <div className="kubaran-stat"><strong>100%</strong><span>Traditional preparation</span></div>
+        <div className="kubaran-stat"><strong>Fresh</strong><span>Carefully selected seafood</span></div>
+        <div className="kubaran-stat"><strong>250g</strong><span>Convenient family packs</span></div>
+        <div className="kubaran-stat"><strong>Doorstep</strong><span>Delivery you can track</span></div>
+      </section>
 
     {/* QUALITY */}
 <section className="kubaran-quality" id="quality">
