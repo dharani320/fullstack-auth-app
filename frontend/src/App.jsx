@@ -3399,11 +3399,11 @@ const deleteProduct = async (productId) => {
         CONTACT
       </span>
 
-      <a href="tel:+919787739778">
-        +91 97877 39778
+      <a href="tel:+919751170173">
+        +91 97511 70173
       </a>
 
-      <a href="https://wa.me/919787739778">
+      <a href="https://wa.me/9751170173">
         WhatsApp
       </a>
 
@@ -3416,29 +3416,26 @@ const deleteProduct = async (productId) => {
       </span>
 
     </div>
+{false && (
+  <div className="footer-admin">
+    <span className="footer-label">
+      BUSINESS
+    </span>
 
-    <div className="footer-admin">
+    <p>
+      Manage products, orders
+      <br />
+      and customer deliveries.
+    </p>
 
-      <span className="footer-label">
-        BUSINESS
-      </span>
-
-      <p>
-        Manage products, orders
-        <br />
-        and customer deliveries.
-      </p>
-
-      <button
-        className="footer-admin-button"
-        onClick={() => setShowAdminLogin(true)}
-      >
-        Admin Login
-      </button>
-
-    </div>
-
+    <button
+      className="footer-admin-button"
+      onClick={() => setShowAdminLogin(true)}
+    >
+      Admin Login
+    </button>
   </div>
+)}
 
   <div className="footer-bottom">
 
